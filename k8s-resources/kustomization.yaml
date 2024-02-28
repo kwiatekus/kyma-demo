@@ -1,0 +1,12 @@
+resources:
+- hana-instance.yaml
+- fn-hana.yaml
+
+configMapGenerator:
+- name: hana
+  envs:
+  - hana.env
+  options:
+    disableNameSuffixHash: true
+
+  

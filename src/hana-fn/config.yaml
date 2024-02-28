@@ -1,0 +1,6 @@
+name: hana-fn
+namespace: default
+runtime: nodejs18
+source:
+    sourceType: inline
+schemaVersion: v0

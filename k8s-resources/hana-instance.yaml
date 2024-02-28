@@ -1,0 +1,29 @@
+apiVersion: services.cloud.sap.com/v1
+kind: ServiceInstance
+metadata:
+  name: hana
+  namespace: default
+spec:
+  serviceOfferingName: hana-cloud
+  servicePlanName: hana
+  externalName: hana
+  parameters:
+    data:
+      memory: 30
+      vcpu: 2
+      whitelistIPs: ["0.0.0.0/0"]
+      generateSystemPassword: true
+      edition: "cloud"
+---
+apiVersion: services.cloud.sap.com/v1
+kind: ServiceBinding
+metadata:
+  name: hana
+  namespace: default
+spec:
+  serviceInstanceName: hana
+  externalName: hana
+  secretName: hana
+  parameters:
+    scope: administration
+    credential-type: PASSWORD_GENERATED

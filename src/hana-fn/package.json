@@ -1,0 +1,9 @@
+{
+  "name": "hana-fn",
+  "version": "0.0.1",
+  "dependencies": {
+    "@sap/hana-client": "^2.19.21",
+    "@sap/xsenv": "^4.2.0",
+    "uuid": "^9.0.1"
+  }
+}
