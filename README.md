@@ -20,3 +20,22 @@ CREATE TABLE DKOM.BOOKS (
      primary key(id)
 );
 ```
+
+
+## Verify
+
+Read books  
+
+`GET https://books.e9b2722.stage.kyma.ondemand.com`
+
+Add book
+
+`Post https://books.e9b2722.stage.kyma.ondemand.com` 
+```json
+{
+     "author":"Astrid Lindgren",
+     "title":"Pippi Goes On Board",
+}
+```
+
+Inspect traces in browser https://jaeger.e9b2722.stage.kyma.ondemand.com/search

@@ -1,0 +1,17 @@
+apiVersion: gateway.kyma-project.io/v1beta1
+kind: APIRule
+metadata:
+    name: jaeger
+spec:
+    gateway: kyma-gateway.kyma-system.svc.cluster.local
+    host: jaeger
+    rules:
+        - accessStrategies:
+            - handler: allow
+          methods:
+            - GET
+          path: /.*
+    service:
+        name: simplest-query
+        namespace: observability
+        port: 16686

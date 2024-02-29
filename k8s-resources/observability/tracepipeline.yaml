@@ -1,0 +1,10 @@
+apiVersion: telemetry.kyma-project.io/v1alpha1
+kind: TracePipeline
+metadata:
+  name: backend
+spec:
+  output:
+    otlp:
+      protocol: http
+      endpoint:
+        value: http://simplest-collector.observability.svc.cluster.local:4318

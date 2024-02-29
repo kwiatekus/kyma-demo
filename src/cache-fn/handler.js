@@ -5,7 +5,7 @@ class Cache {
     constructor() {
       this.data = undefined;
     }
-    // Method
+
     async getData() {
         if (!this.data){
             this.data = await this.fetchData() 

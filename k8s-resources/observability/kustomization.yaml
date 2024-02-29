@@ -1,0 +1,5 @@
+namespace: observability
+resources:
+ - namespace.yaml
+ - https://github.com/jaegertracing/jaeger-operator/releases/download/v1.52.0/jaeger-operator.yaml
+ - api-rule.yaml
