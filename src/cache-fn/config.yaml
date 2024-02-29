@@ -1,0 +1,9 @@
+name: cache-fn
+namespace: default
+runtime: nodejs18
+source:
+    sourceType: inline
+schemaVersion: v0
+env:
+- name: DATA_SRC_URL
+  value: http://hana-fn.default.svc.cluster.local:80

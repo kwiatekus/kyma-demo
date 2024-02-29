@@ -47,22 +47,13 @@ module.exports = {
             const books = await queryDB(`SELECT * FROM BOOKS`);
             return books
         } else if(event.extensions.request.method === 'POST'){
-            if(event.extensions.request.body.title && event.extensions.request.body.author){
-                let query = `insert into BOOKS values ('${uuidv4()}', '${event.extensions.request.body.title}', '${event.extensions.request.body.author}')`
-                try {
-                    let result =  await queryDB(query)
-                    return `${result} book added`
-                } catch (err) {
-                    return err.message;
-                }
+            let query = `insert into BOOKS values ('${uuidv4()}', '${event.extensions.request.body.title}', '${event.extensions.request.body.author}')`
+            try {
+                let result =  await queryDB(query)
+                return `${result} book added`
+            } catch (err) {
+                return err.message;
             }
-
-            res = event.extensions.response;
-            
-            res.statusMessage="'author' & 'title' required in the payload"
-            res.status(400)
-            return
-            
         }
     }
 }

@@ -1,0 +1,20 @@
+apiVersion: services.cloud.sap.com/v1
+kind: ServiceBinding
+metadata:
+  name: hana
+spec:
+  serviceInstanceName: hana
+  externalName: hana
+  secretName: hana
+  parameters:
+    scope: administration
+    credential-type: PASSWORD_GENERATED
+---
+apiVersion: services.cloud.sap.com/v1
+kind: ServiceBinding
+metadata:
+  name: hana-url
+spec:
+  serviceInstanceName: hana
+  externalName: hana-url
+  secretName: hana-url

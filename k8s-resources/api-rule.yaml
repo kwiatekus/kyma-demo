@@ -1,7 +1,7 @@
 apiVersion: gateway.kyma-project.io/v1beta1
 kind: APIRule
 metadata:
-    name: hana-fn
+    name: cache-fn
 spec:
     gateway: kyma-gateway.kyma-system.svc.cluster.local
     host: books
@@ -13,6 +13,6 @@ spec:
             - POST
           path: /.*
     service:
-        name: hana-fn
+        name: cache-fn
         namespace: default
         port: 80

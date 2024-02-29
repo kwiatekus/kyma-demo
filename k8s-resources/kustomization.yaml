@@ -1,6 +1,7 @@
 resources:
-- hana-instance.yaml
+- hana-bindings.yaml
 - fn-hana.yaml
+- fn-cache.yaml
 - api-rule.yaml
 
   
