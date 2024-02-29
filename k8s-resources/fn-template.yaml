@@ -1,41 +1,10 @@
     env:
     - name: SERVICE_BINDING_ROOT
       value: /bindings
-    - name: HANA_HOST
-      valueFrom:
-        configMapKeyRef:
-          key: host
-          name: hana
-    - name: HANA_PORT
-      valueFrom:
-        configMapKeyRef:
-          key: port
-          name: hana
     - name: HANA_SCHEMA
-      valueFrom:
-        configMapKeyRef:
-          key: schema
-          name: hana
+      value: DKOM
     secretMounts:
       - secretName: hana
         mountPath: "/bindings/hana"
----
-apiVersion: gateway.kyma-project.io/v1beta1
-kind: APIRule
-metadata:
-    creationTimestamp: null
-    name: hana-fn
-spec:
-    gateway: kyma-gateway.kyma-system.svc.cluster.local
-    host: books
-    rules:
-        - accessStrategies:
-            - handler: allow
-          methods:
-            - GET
-            - POST
-          path: /.*
-    service:
-        name: hana-fn
-        namespace: default
-        port: 80
+      - secretName: hana-url
+        mountPath: "/bindings/hana-url"

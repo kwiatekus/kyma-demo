@@ -1,0 +1,18 @@
+apiVersion: gateway.kyma-project.io/v1beta1
+kind: APIRule
+metadata:
+    name: hana-fn
+spec:
+    gateway: kyma-gateway.kyma-system.svc.cluster.local
+    host: books
+    rules:
+        - accessStrategies:
+            - handler: allow
+          methods:
+            - GET
+            - POST
+          path: /.*
+    service:
+        name: hana-fn
+        namespace: default
+        port: 80

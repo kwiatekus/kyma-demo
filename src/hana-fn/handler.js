@@ -4,14 +4,14 @@ const hana = require('@sap/hana-client');
 const { v4: uuidv4 } = require('uuid');
 
 
-const services = xsenv.getServices({
-   hana: { name: 'hana' }
+var services = xsenv.getServices({
+   hana: { name: 'hana' },
+   hanaUrl: { name: 'hana-url' },
  });
 
-
-services.hana.host = process.env.HANA_HOST;
-services.hana.port = process.env.HANA_PORT;
 services.hana.schema = process.env.HANA_SCHEMA;
+services.hana.host = services.hanaUrl.host;
+services.hana.port = services.hanaUrl.port;
 
 const hanaConn = hana.createConnection();
 

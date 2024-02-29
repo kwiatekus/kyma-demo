@@ -2,7 +2,6 @@ apiVersion: services.cloud.sap.com/v1
 kind: ServiceInstance
 metadata:
   name: hana
-  namespace: default
 spec:
   serviceOfferingName: hana-cloud
   servicePlanName: hana
@@ -19,7 +18,6 @@ apiVersion: services.cloud.sap.com/v1
 kind: ServiceBinding
 metadata:
   name: hana
-  namespace: default
 spec:
   serviceInstanceName: hana
   externalName: hana
@@ -27,3 +25,12 @@ spec:
   parameters:
     scope: administration
     credential-type: PASSWORD_GENERATED
+---
+apiVersion: services.cloud.sap.com/v1
+kind: ServiceBinding
+metadata:
+  name: hana-url
+spec:
+  serviceInstanceName: hana
+  externalName: hana-url
+  secretName: hana-url

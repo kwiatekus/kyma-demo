@@ -21,46 +21,15 @@ spec:
                     "uuid": "^9.0.1"
                   }
                 }
-            source: "const xsenv = require('@sap/xsenv');\nconst hana = require('@sap/hana-client');\n\nconst { v4: uuidv4 } = require('uuid');\n\n\nconst services = xsenv.getServices({\n   hana: { name: 'hana' }\n });\n\n\nservices.hana.host = process.env.HANA_HOST;\nservices.hana.port = process.env.HANA_PORT;\nservices.hana.schema = process.env.HANA_SCHEMA;\n\nconst hanaConn = hana.createConnection();\n\nasync function queryDB(sql) {\n  try {\n    await hanaConn.connect(services.hana);\n  } catch (err) {\n    console.error('queryDB connect', err.message, err.stack);\n    results = err.message;\n  }\n  try {\n    console.log(`schema: ${services.hana.schema}`)\n    await hanaConn.exec('SET SCHEMA ' + services.hana.schema);\n    \n    results = await hanaConn.exec(sql);\n    \n  } catch (err) {\n    console.error('queryDB exec', err.message, err.stack);\n    results = err.message;\n  }\n  try {\n    await hanaConn.disconnect();\n  } catch (err) {\n    console.error('queryDB disconnect', err.message, err.stack);\n    results = err.message;\n  }\n  return results;\n}\n\nmodule.exports = {\n    main: async function (event, context) {\n        if (event.extensions.request.method === 'GET') {\n            const books = await queryDB(`SELECT * FROM BOOKS`);\n            return books\n        } else if(event.extensions.request.method === 'POST'){\n            if(event.extensions.request.body.title && event.extensions.request.body.author){\n                let query = `insert into BOOKS values ('${uuidv4()}', '${event.extensions.request.body.title}', '${event.extensions.request.body.author}')`\n                try {\n                    let result =  await queryDB(query)\n                    return `${result} book added`\n                } catch (err) {\n                    return err.message;\n                }\n            }\n\n            res = event.extensions.response;\n            res.status(400)\n            res.statusMessage=\"'author' & 'title' required in the payload\"\n            return\n            \n        }\n    }\n}"
+            source: "const xsenv = require('@sap/xsenv');\nconst hana = require('@sap/hana-client');\n\nconst { v4: uuidv4 } = require('uuid');\n\n\nvar services = xsenv.getServices({\n   hana: { name: 'hana' },\n   hanaUrl: { name: 'hana-url' },\n });\n\nservices.hana.schema = process.env.HANA_SCHEMA;\nservices.hana.host = services.hanaUrl.host;\nservices.hana.port = services.hanaUrl.port;\n\nconst hanaConn = hana.createConnection();\n\nasync function queryDB(sql) {\n  try {\n    await hanaConn.connect(services.hana);\n  } catch (err) {\n    console.error('queryDB connect', err.message, err.stack);\n    results = err.message;\n  }\n  try {\n    console.log(`schema: ${services.hana.schema}`)\n    await hanaConn.exec('SET SCHEMA ' + services.hana.schema);\n    \n    results = await hanaConn.exec(sql);\n    \n  } catch (err) {\n    console.error('queryDB exec', err.message, err.stack);\n    results = err.message;\n  }\n  try {\n    await hanaConn.disconnect();\n  } catch (err) {\n    console.error('queryDB disconnect', err.message, err.stack);\n    results = err.message;\n  }\n  return results;\n}\n\nmodule.exports = {\n    main: async function (event, context) {\n        if (event.extensions.request.method === 'GET') {\n            const books = await queryDB(`SELECT * FROM BOOKS`);\n            return books\n        } else if(event.extensions.request.method === 'POST'){\n            if(event.extensions.request.body.title && event.extensions.request.body.author){\n                let query = `insert into BOOKS values ('${uuidv4()}', '${event.extensions.request.body.title}', '${event.extensions.request.body.author}')`\n                try {\n                    let result =  await queryDB(query)\n                    return `${result} book added`\n                } catch (err) {\n                    return err.message;\n                }\n            }\n\n            res = event.extensions.response;\n            \n            res.statusMessage=\"'author' & 'title' required in the payload\"\n            res.status(400)\n            return\n            \n        }\n    }\n}"
 
     env:
     - name: SERVICE_BINDING_ROOT
       value: /bindings
-    - name: HANA_HOST
-      valueFrom:
-        configMapKeyRef:
-          key: host
-          name: hana
-    - name: HANA_PORT
-      valueFrom:
-        configMapKeyRef:
-          key: port
-          name: hana
     - name: HANA_SCHEMA
-      valueFrom:
-        configMapKeyRef:
-          key: schema
-          name: hana
+      value: DKOM
     secretMounts:
       - secretName: hana
         mountPath: "/bindings/hana"
----
-apiVersion: gateway.kyma-project.io/v1beta1
-kind: APIRule
-metadata:
-    creationTimestamp: null
-    name: hana-fn
-spec:
-    gateway: kyma-gateway.kyma-system.svc.cluster.local
-    host: books
-    rules:
-        - accessStrategies:
-            - handler: allow
-          methods:
-            - GET
-            - POST
-          path: /.*
-    service:
-        name: hana-fn
-        namespace: default
-        port: 80
+      - secretName: hana-url
+        mountPath: "/bindings/hana-url"
