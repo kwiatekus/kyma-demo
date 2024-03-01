@@ -6,6 +6,9 @@
 <!-- https://community.sap.com/t5/technology-blogs-by-sap/provisioning-sap-hana-cloud-databases-from-kyma-and-kubernetes-2-kyma/ba-p/13577215 -->
 
 <!-- TODO: initialize using hana design time stuff -->
+
+[Cloud Identity Services tenant](https://help.sap.com/docs/identity-provisioning?locale=en-US&version=Cloud)
+
 Initialize DB manually
 ```sql
 
@@ -27,19 +30,28 @@ CREATE TABLE DKOM.BOOKS (
 
 ## Verify
 
-Read books  
+### Read books  
 
 `GET https://books.e9b2722.stage.kyma.ondemand.com`
 
-Add book
+### Add book
 
-`Post https://books.e9b2722.stage.kyma.ondemand.com` 
-```json
-{
-     "author":"Astrid Lindgren",
-     "title":"Pippi Goes On Board",
-}
-```
+Issue JWT
+
+export CLIENT_ID={IAS_APP_CLIENT_ID}
+export CLIENT_SECRET={IAS_APP_CLIENT_SECRET}
+
+export ENCODED_CREDENTIALS=$(echo -n "$CLIENT_ID:$CLIENT_SECRET" | base64)
+
+curl -X POST "https://${IAS_TENANT}.accounts400.ondemand.com/oauth2/token?grant_type=client_credentials" -H "Content-Type: application/x-www-form-urlencoded" -H "Authorization: Basic $ENCODED_CREDENTIALS"
+
+export TOKEN={ACCESS_TOKEN}
+
+Post a book
+
+curl  -X POST https://books.e9b2722.stage.kyma.ondemand.com -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" -d '{"author":"Astrid Lindgren","title":"Pippi Goes On Board"}'  
+
+### Traces
 
 Inspect traces in browser https://jaeger.e9b2722.stage.kyma.ondemand.com/search
 
