@@ -1,18 +1,23 @@
 apiVersion: gateway.kyma-project.io/v1beta1
 kind: APIRule
 metadata:
-    name: cache-fn
+  name: cache-fn
 spec:
-    gateway: kyma-gateway.kyma-system.svc.cluster.local
-    host: books
-    rules:
-        - accessStrategies:
-            - handler: allow
-          methods:
-            - GET
-            - POST
-          path: /.*
-    service:
-        name: cache-fn
-        namespace: default
-        port: 80
+  gateway: kyma-gateway.kyma-system.svc.cluster.local
+  host: books
+  service:
+    name: cache-fn
+    namespace: default
+    port: 80
+  rules:
+    - path: /.*
+      methods: ["GET"]
+      accessStrategies:
+      - handler: allow
+    - path: /.*
+      methods: ["POST"]
+      accessStrategies:
+      - handler: jwt
+        config:
+          jwks_urls:
+          - https://${IAS_TENANT}.accounts400.ondemand.com/oauth2/certs
