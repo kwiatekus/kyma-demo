@@ -13,7 +13,7 @@ spec:
     - path: /.*
       methods: ["GET"]
       accessStrategies:
-      - handler: allow
+      - handler: noop
     - path: /.*
       methods: ["POST"]
       accessStrategies:
