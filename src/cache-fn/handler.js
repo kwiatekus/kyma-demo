@@ -8,7 +8,11 @@ class Cache {
 
     async getData() {
         if (!this.data){
-            this.data = await this.fetchData() 
+            try {
+              this.data = await this.fetchData() 
+            } catch (e) {
+              return e
+            }
         }
         return this.data
     }
