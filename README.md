@@ -1,13 +1,9 @@
 ## Prerequisites
 
 
-<!-- [Create hana instance](https://help.sap.com/docs/hana-cloud/sap-hana-cloud-administration-guide/create-sap-hana-database-instance-in-kyma-environment?locale=en-US) -->
+ - JWT token issuer. [Cloud Identity Services tenant](https://help.sap.com/docs/identity-provisioning?locale=en-US&version=Cloud) or any other OIDC compliant identity provider.
 
-<!-- https://community.sap.com/t5/technology-blogs-by-sap/provisioning-sap-hana-cloud-databases-from-kyma-and-kubernetes-2-kyma/ba-p/13577215 -->
-
-<!-- TODO: initialize using hana design time stuff -->
-
-[Cloud Identity Services tenant](https://help.sap.com/docs/identity-provisioning?locale=en-US&version=Cloud)
+ - Subaccount in SAP BTP with entitlement for `SAP Kyma Runtime` and `SAP Hana Cloud`
 
 ## Deploy
 
@@ -24,6 +20,7 @@ make deploy_app
 
 ```
 
+<!-- todo: initialize via hana design time services -->
 Initialize DB manually 
 ```sql
 
