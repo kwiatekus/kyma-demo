@@ -1,6 +1,5 @@
 resources:
 - fn-hana.yaml
-- fn-cache.yaml
 - api-rule.yaml
 
 
