@@ -1,7 +1,7 @@
 apiVersion: gateway.kyma-project.io/v1beta1
 kind: APIRule
 metadata:
-  name: books-api
+  name: books-fn
 spec:
   gateway: kyma-gateway.kyma-system.svc.cluster.local
   host: books

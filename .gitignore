@@ -2,3 +2,4 @@ src/hana-fn/node_modules
 src/cache-fn/node_modules
 src/cache-fn/package-lock.json
 src/hana-fn/package-lock.json
+.DS_Store
