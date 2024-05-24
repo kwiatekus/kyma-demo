@@ -1,0 +1,64 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hana-hdi-job
+  labels:
+    app: hana-hdi-job
+spec:
+  parallelism: 1
+  completions: 1
+  manualSelector: false
+  
+  template:
+    metadata:
+      labels:
+        app: hana-hdi-job
+        sidecar.istio.io/inject: "false"
+      annotations:
+    spec:
+      restartPolicy: OnFailure
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+      containers:
+        - image: hanaacademy/hdi-deploy:latest
+          name: hana-hdi-job
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SERVICE_BINDING_ROOT
+              value: /bindings
+            - name: EXIT
+              value: 'true'
+            - name: EXIT_PROCESS_AFTER_UPLOAD
+              value: "true"
+          volumeMounts:
+            - name: hdi
+              mountPath: "/bindings/hana-hdi-books"
+              readOnly: true
+            - name: src
+              mountPath: "/workspace/src/.hdinamespace"
+              subPath: ".hdinamespace"
+              readOnly: true
+            - name: src
+              mountPath: "/workspace/src/.hdiconfig"
+              subPath: ".hdiconfig"
+              readOnly: true
+            - name: src
+              mountPath: "/workspace/src/books.hdbtable"
+              subPath: "books.hdbtable"
+              readOnly: true
+            - name: src
+              mountPath: "/workspace/src/books.hdbtabledata"
+              subPath: "books.hdbtabledata"
+              readOnly: true
+            - name: src
+              mountPath: "/workspace/src/books.csv"
+              subPath: "books.csv"
+              readOnly: true
+      volumes:
+        - name: hdi
+          secret:
+            secretName: hana-hdi-books-binding-secret
+        - name: src
+          configMap:
+            name: hana-hdi-job-src

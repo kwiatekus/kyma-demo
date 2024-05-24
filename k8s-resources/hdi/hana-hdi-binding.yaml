@@ -1,0 +1,10 @@
+apiVersion: services.cloud.sap.com/v1
+kind: ServiceBinding
+metadata:
+  name: hana-hdi-books-binding
+  labels:
+    app.kubernetes.io/name: hana-hdi-books-binding
+spec:
+  serviceInstanceName: hana-hdi-books
+  externalName: hana-hdi-books
+  secretName: hana-hdi-books-binding-secret

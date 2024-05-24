@@ -3,3 +3,6 @@ src/cache-fn/node_modules
 src/cache-fn/package-lock.json
 src/hana-fn/package-lock.json
 .DS_Store
+env/
+bin/
+k8s-resources/docker-registry-secret/dockerconfig.env

@@ -1,0 +1,10 @@
+apiVersion: services.cloud.sap.com/v1
+kind: ServiceInstance
+metadata:
+  name: hana-hdi-books
+  labels:
+    app.kubernetes.io/name: hana-hdi-books
+spec:
+  externalName: hana-hdi-books
+  serviceOfferingName: hana
+  servicePlanName: hdi-shared

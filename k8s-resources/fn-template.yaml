@@ -2,7 +2,7 @@
     - name: SERVICE_BINDING_ROOT
       value: /bindings
     - name: HANA_SCHEMA
-      value: DKOM
+      value: DEVOXX
     secretMounts:
       - secretName: hana
         mountPath: "/bindings/hana"
