@@ -1,0 +1,6 @@
+name: hana-simple
+namespace: default
+runtime: nodejs20
+source:
+    sourceType: inline
+schemaVersion: v0

@@ -1,7 +1,6 @@
-src/hana-fn/node_modules
-src/cache-fn/node_modules
-src/cache-fn/package-lock.json
-src/hana-fn/package-lock.json
+src/**/node_modules
+src/**/package-lock.json
+
 .DS_Store
 env/
 bin/

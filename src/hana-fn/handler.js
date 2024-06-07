@@ -33,40 +33,18 @@ async function queryDB(sql) {
   }
   return results;
 }
-class Cache {
-  constructor() {
-    this.data = undefined;
-  }
 
-  async getData() {
-      if (!this.data){
-          try {
-            this.data = await queryDB(`SELECT * FROM BOOKS`) 
-          } catch (e) {
-            console.log(e)
-          }
-      }
-      return this.data
-  }
-
-  invalidate() {
-      this.data=undefined
-  }
-}
-
-const cache = new Cache();
 
 module.exports = {
     main: async function (event, context) {
         tracer = event.tracer;
         if (event.extensions.request.method === 'GET') {
-            const books = await cache.getData();
+            const books = await queryDB(`SELECT * FROM BOOKS`) 
             return books
         } else if(event.extensions.request.method === 'POST'){
             let query = `insert into BOOKS values ('${uuidv4()}', '${event.extensions.request.body.title}', '${event.extensions.request.body.author}')`
             try {
                 let result =  await queryDB(query)
-                cache.invalidate();
                 return `${result} book added`
             } catch (err) {
                 return err.message;

@@ -5,15 +5,16 @@ metadata:
     creationTimestamp: null
     labels:
         app.kubernetes.io/name: hana-fn
-    name: hana-fn
+    name: books-fn
     namespace: default
 spec:
-    runtime: nodejs18
+    runtime: nodejs20
+    runtimeImageOverride: europe-docker.pkg.dev/kyma-project/prod/function-runtime-nodejs20:5a536fef535f13a64c7f2e33a3e38a045f361c58
     source:
         inline:
             dependencies: |
                 {
-                  "name": "hana-fn",
+                  "name": "books-fn",
                   "version": "0.0.1",
                   "dependencies": {
                     "@sap/hana-client": "^2.19.21",

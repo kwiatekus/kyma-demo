@@ -1,0 +1,7 @@
+{
+  "name": "hana-simple",
+  "version": "0.0.1",
+  "dependencies": {
+    "@sap/hana-client": "^2.20.23"
+  }
+}
