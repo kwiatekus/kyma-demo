@@ -1,0 +1,25 @@
+name: deploy-on-kyma
+
+permissions:
+  # Required to receive OIDC tokens
+  # https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#updating-your-actions-for-oidc
+  id-token: write
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        # This requires an OIDC CR and RBAC on the target cluster 
+      - name: Deploy
+        env:
+          CIS_BINDING: "${{ secrets.CIS_BINDING }}"
+        run: |
+          echo "$CIS_BINDING" > cis-binding.json
+          bin/kyma oidc --credentials-path=cis-binding.json --cluster-server --output generated-kubeconfig.yaml
+          kubectl apply -k deploy --kubeconfig=generated-kubeconfig.yaml
