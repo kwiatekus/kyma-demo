@@ -1,17 +1,5 @@
-set_envs:
-	export $(cat env/.env | xargs)
-
-echo_envs:
-	echo ${PLAN}
-
-kyma_provision:
-	bin/kyma.sh provision --credentials-path=${CIS_CONFIG_PATH} --region=${REGION}  --plan=${PLAN} --owner=${OWNER} --cluster-name=${CLUSTER_NAME}
-
 hana_map:
 	bin/kyma.sh hana map --name=hana
-
-enable_kyma_modules:
-	kubectl apply -f k8s-resources/enable-modules.yaml
 
 hana_provision:
 	kubectl wait --for condition=established --timeout=60s crd/serviceinstances.services.cloud.sap.com

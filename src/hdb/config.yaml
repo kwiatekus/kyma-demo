@@ -1,6 +1,0 @@
-name: hdb
-namespace: default
-runtime: nodejs20
-source:
-    sourceType: inline
-schemaVersion: v0

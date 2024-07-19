@@ -1,0 +1,41 @@
+{
+    "user-access": "public",
+    "oauth2-configuration": {
+        "grant-types": [
+            "authorization_code",
+            "authorization_code_pkce_s256",
+            "password",
+            "refresh_token"
+        ],
+        "token-policy": {
+            "token-validity": 3600,
+            "refresh-validity": 15552000,
+            "refresh-usage-after-renewal": "off",
+            "refresh-parallel": 3,
+            "access-token-format": "default"
+        },
+        "public-client": true,
+        "redirect-uris": [
+            "https://dashboard.kyma.cloud.sap",
+            "https://dashboard.dev.kyma.cloud.sap",
+            "https://dashboard.stage.kyma.cloud.sap",
+            "http://localhost:8000"
+        ]
+    },
+    "subject-name-identifier": {
+        "attribute": "mail",
+        "fallback-attribute": "none"
+    },
+    "default-attributes": null,
+    "assertion-attributes": {
+        "email": "mail",
+        "groups": "companyGroups",
+        "first_name": "firstName",
+        "last_name": "lastName",
+        "login_name": "loginName",
+        "mail": "mail",
+        "scope": "companyGroups",
+        "user_uuid": "userUuid",
+        "locale": "language"
+    }
+}

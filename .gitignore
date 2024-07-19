@@ -3,5 +3,5 @@ src/**/package-lock.json
 
 .DS_Store
 env/
-
+hack/tmp
 k8s-resources/docker-registry-secret/dockerconfig.env

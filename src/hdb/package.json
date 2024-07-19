@@ -1,8 +1,0 @@
-{
-  "name": "hdb",
-  "version": "0.0.1",
-  "type": "module",
-  "dependencies": {
-    "hdb": "latest"
-  }
-}

@@ -9,7 +9,6 @@ metadata:
     namespace: default
 spec:
     runtime: nodejs20
-    runtimeImageOverride: europe-docker.pkg.dev/kyma-project/prod/function-runtime-nodejs20:5a536fef535f13a64c7f2e33a3e38a045f361c58
     source:
         inline:
             dependencies: |
@@ -17,7 +16,7 @@ spec:
                   "name": "books-fn",
                   "version": "0.0.1",
                   "dependencies": {
-                    "@sap/hana-client": "^2.19.21",
+                    "@sap/hana-client": "latest",
                     "@sap/xsenv": "^4.2.0",
                     "uuid": "^9.0.1"
                   }

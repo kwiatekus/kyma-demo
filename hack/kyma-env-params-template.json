@@ -1,0 +1,35 @@
+{
+    "modules": {
+        "list": [
+            {
+                "name": "api-gateway",
+                "channel": "fast"
+            },
+            {
+                "name": "istio",
+                "channel": "fast"
+            },
+            {
+                "name": "btp-operator",
+                "channel": "fast"
+            },
+            {
+                "name": "serverless",
+                "channel": "fast"
+            },
+            {
+                "name": "telemetry",
+                "channel": "fast"
+            }
+        ]
+    },    
+
+    "oidc": {
+        "groupsClaim": "groups",
+        "signingAlgs": [
+            "RS256"
+        ],
+        "usernameClaim": "sub",
+        "usernamePrefix": "-"
+    }
+}
