@@ -52,7 +52,33 @@ create-custom-idp: ## trust custom idp in the subaccount and create OIDC applica
 	done 
 	btp get services/binding --name ${BTP_IAS_APP_NAME}-oidc-app-binding | jq '.credentials | { clientid,  url }' > ./tmp/idp-output.json
 
-.PHONY:
+.PHONY: create-kyma-env
 create-kyma-env: 
 	jq 'input as  $$idp | . + { name: "${BTP_KYMA_NAME}", region:"${BTP_KYMA_REGION}", administrators: ["${BTP_BOT_USER}", "krzysztof.kwiatosz@sap.com"]} | .oidc |= . + { clientID: $$idp.clientid , issuerURL: $$idp.url  }' kyma-env-params-template.json tmp/idp-output.json > tmp/kyma-params.json
 	btp create accounts/environment-instance --display-name ${BTP_KYMA_NAME} --environment kyma --service kymaruntime --plan ${KYMA_PLAN} --parameters tmp/kyma-params.json > tmp/kyma-output.json
+	until [ "$$(btp get accounts/environment-instance $$(jq -r '. | .id' tmp/kyma-output.json) | jq -r '. | .state ')" = "OK" ] ; \
+	do \
+	  echo "kymaruntime creation in progress......"  ;\
+	  sleep 30 ; \
+	  if [ "$$(btp get accounts/environment-instance $$(jq -r '. | .id' tmp/kyma-output.json) | jq -r '. | .state ')" = "CREATING" ] ; \
+	  then \
+	    echo "not ready yet. please continue waiting..." ; \
+	  fi  ; \
+	  if [ "$$(btp get accounts/environment-instance $$(jq -r '. | .id' tmp/kyma-output.json) | jq -r '. | .state ')" = "CREATION_FAILED" ] ; \
+	  then \
+	    echo "$$(btp get accounts/environment-instance $$(jq -r '. | .id' tmp/kyma-output.json) | jq -r '. | .stateMessage ')" ; \
+	    echo "failed. aborting..." ; \
+	    break; \
+	  fi  ; \
+	done
+
+.PHONY: headless-kubeconfig
+headless-kubeconfig:
+	curl -o tmp/kubeconfig.yaml $$(btp list accounts/environment-instance | jq -r '.environmentInstances[] | select(.serviceName == "kymaruntime") | .labels | fromjson | .KubeconfigURL '  )
+	kubectl config view --minify --raw -ojson --kubeconfig tmp/kubeconfig.yaml > tmp/kubeconfig.json 
+	jq 'input as  $$exec | .users[0].user.exec=$$exec' tmp/kubeconfig.json kubeconfig-user-exec-template.json > tmp/headless-kubeconfig.json
+
+
+.PHONY: access-kyma
+access-kyma:
+	kubectl get nodes --kubeconfig tmp/headless-kubeconfig.json
