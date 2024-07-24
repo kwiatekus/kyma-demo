@@ -1,0 +1,3 @@
+{
+    "credential-type": "X509_GENERATED", "key-length": 4096, "validity": 1, "validity-type": "DAYS", "app-identifier":"kymaruntime"
+}

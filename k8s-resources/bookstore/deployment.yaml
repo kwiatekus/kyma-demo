@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookstore-service
+  labels:
+    app: bookstore-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookstore-service
+      example: bookstore-service
+  template:
+    metadata:
+      labels:
+        app: bookstore-service
+        example: bookstore-service
+    spec:
+      # volumes:
+      #   - name: hana
+      #     secret:
+      #       secretName: hana
+      #   - name: hana-url
+      #     secret:
+      #       secretName: hana-url
+      containers:
+        - name: bookstore-service
+          image: foo #This will be set dynamically
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: 100m
+              memory: 256Mi
+            requests:
+              cpu: 20m
+              memory: 32Mi
+          volumeMounts:
+          # - name: hana
+          #   readOnly: true
+          #   mountPath: /bindings/hana
+          # - name: hana-url
+          #   readOnly: true
+          #   mountPath: /bindings/hana-url
+          env:
+            - name: HANA_SCHEMA
+              value: DKOM
+            - name: SERVICE_BINDING_ROOT
+              value: /bindings
+      imagePullSecrets:
+        - name: dockerregistry-config
+

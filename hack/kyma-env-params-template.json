@@ -12,14 +12,6 @@
             {
                 "name": "btp-operator",
                 "channel": "fast"
-            },
-            {
-                "name": "serverless",
-                "channel": "fast"
-            },
-            {
-                "name": "telemetry",
-                "channel": "fast"
             }
         ]
     },    

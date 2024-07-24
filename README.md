@@ -1,26 +1,39 @@
 ## Prerequisites
 
+You need to have ( as manual prep)
+ - an administrative access to an SAP BTP Global Account.
+ - a [shared mailbox ](https://sapit-home-prod-004.launchpad.cfapps.eu10.hana.ondemand.com/site/Home?sap-language=en#rmmt2uiuser-Display?sap-ui-app-id-hint=1dc4d034-7c78-4d79-bc17-39a70945fce6).
+ - a [custom SAP IAS tenant](https://help.sap.com/docs/cloud-identity-services/cloud-identity-services/get-your-tenant)
+ - trust established between your global account and custom IAS tenant.
+ - address of the shared maibloxbot added to administrator role collection on global account level.
 
- - JWT token issuer. [Cloud Identity Services tenant](https://help.sap.com/docs/identity-provisioning?locale=en-US&version=Cloud) or any other OIDC compliant identity provider.
+Copy `env/.env-template` into `env/.env` file and fill in the missing variables:
+ - Use email address of a shared mailbox (bot user) as a value for `BTP_BOT_USER`.
+ - Invite bot user as as a P-user in the custom SAP IAS tenant. Having access to the shared mailbox, complete the invitation flow and set a strong password and store tha password in a secure vault. Use the password for `BTP_BOT_PASSWORD`.
+ - The `env-template` assumes that canary landscape is used. It contains already proper values for `BTP_BACKEND_URL` and `BTP_CUSTOM_IAS_DOMAIN`. Adjust the values if needed.
+ - Use the tenant name of your custom SAP IAS tenant as `BTP_CUSTOM_IAS_TENANT`
+ - Adjust the `BTP_KYMA_PLAN`, `BTP_SA_REGION` and `BTP_KYMA_REGION`
 
- - Subaccount in SAP BTP with entitlement for `SAP Kyma Runtime` and `SAP Hana Cloud`
+## Automated bootstrap 
 
-## Deploy
+The following command ( executed from `/hack` folder) would 
+ - create btp platform resources, such as subaccount, entitlements, service instances for SAP IAS Application and Kyma environment
+ - craft a one-off headless kubeconfig for initial access to kyma environment
+ - download and use kyma@v3 CLI to create a service account based access
+ - enable docker registry in the kyma environment
+ - build the image of the [bookstore service](src/bookstore) and push it to the kyma's internal docker registry.
+ - deploy the bookstore service [manifests](k8s-resources/bookstore)
+
+Pass an additional human user as a second argument in order to provide yourself access to the kyma runtime. Make sure you are also added to the users of the custom SAP IAS tenant.
 
 ```sh
-
-# Make sure btp-manager, serverless are enabled in kyma runtime
-make enable_kyma_modules
-
-# Provision SAP Hana Cloud instance and create bindings
-make provision_hana
-
-# Deploy application
-make deploy_app
-
+cd hack 
+./bootstrap.sh bla john.doe@sap.com
 ```
 
-<!-- todo: initialize via hana design time services -->
+
+
+<!-- todo: initialize via hana design time services
 Initialize DB manually 
 ```sql
 
@@ -32,7 +45,7 @@ CREATE TABLE DKOM.BOOKS (
      author             VARCHAR(64)      null,
      primary key(id)
 );
-```
+``` -->
 
 ## How it works
 

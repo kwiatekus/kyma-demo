@@ -1,9 +1,0 @@
-generatorOptions:
-  disableNameSuffixHash: true
-
-namespace: kyma-system
-secretGenerator:
-- name: kwiatekus-registry
-  type: Opaque
-  envs:
-  - dockerconfig.env
