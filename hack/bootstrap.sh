@@ -60,6 +60,7 @@ KUBECONFIG=tmp/sa-kubeconfig.yaml make enable_docker_registry
 
 
 # TODO: the following is sort of "kyma push app" equivalent for "cf push"
+sleep 5
 make docker_registry_login
 make docker_build
 make docker_push
