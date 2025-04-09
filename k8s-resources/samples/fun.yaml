@@ -1,0 +1,81 @@
+apiVersion: serverless.kyma-project.io/v1alpha2
+kind: Function
+metadata:
+  labels:
+    app.kubernetes.io/name: node-fun
+  name: node-fun
+  namespace: default
+spec:
+  replicas: 1
+  resourceConfiguration:
+    function:
+      profile: S
+  runtime: nodejs22
+  source:
+    inline:
+      source: |-
+        module.exports = {
+          main: async function (event, context) {
+            return "OK";
+          }
+        }
+---
+apiVersion: serverless.kyma-project.io/v1alpha2
+kind: Function
+metadata:
+  labels:
+    app.kubernetes.io/name: python-fun
+  name: python-fun
+  namespace: default
+spec:
+  replicas: 1
+  resourceConfiguration:
+    function:
+      profile: S
+  runtime: python312
+  source:
+    inline:
+      source: |-
+        def main(event, context):
+          return "OK"
+---
+apiVersion: gateway.kyma-project.io/v2
+kind: APIRule
+metadata:
+  labels:
+    app.kubernetes.io/name: node-fun
+  name: node-fun
+  namespace: default
+spec:
+  gateway: kyma-system/kyma-gateway
+  hosts:
+  - node-fun
+  rules:
+  - methods:
+    - POST
+    noAuth: true
+    path: /*
+  service:
+    name: node-fun
+    port: 80
+---
+apiVersion: gateway.kyma-project.io/v2
+kind: APIRule
+metadata:
+  labels:
+    app.kubernetes.io/name: python-fun
+  name: python-fun
+  namespace: default
+spec:
+  gateway: kyma-system/kyma-gateway
+  hosts:
+  - python-fun
+  rules:
+  - methods:
+    - POST
+    noAuth: true
+    path: /*
+  service:
+    name: python-fun
+    port: 80
+
