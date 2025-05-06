@@ -38,17 +38,18 @@ jobs:
 
       - name: Check Permissions in Kubernetes
         run: |
+
+          echo "${{ secrets.API_SERVER_CA }}" > ca.crt
           kubectl \
           --token=${{ steps.create-oidc-token.outputs.idToken }} \
           --server="${{ secrets.API_SERVER_URL }}" \
-          --certificate-authority="${{ secrets.API_SERVER_CA }}" \
+          --certificate-authority=ca.crt \
           auth can-i list nodes
 
       # - name: Create kubeconfig
       #   id: create-kubeconfig
       #   run: |
       #     echo "${{ secrets.KUBECONFIG_NO_USER }}" > kubeconfig.yaml
-
       #     kyma alpha kubeconfig generate \
       #       --kubeconfig kubeconfig.yaml \
       #       --audience kk-gh-token-test \
