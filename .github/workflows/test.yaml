@@ -42,7 +42,7 @@ jobs:
           echo "${{ secrets.API_SERVER_CA }}" > ca.crt
           kubectl \
           --token=${{ steps.create-oidc-token.outputs.idToken }} \
-          --server="${{ secrets.API_SERVER_URL }}" \
+          --server=${{ secrets.API_SERVER_URL }} \
           --certificate-authority=ca.crt \
           auth can-i list nodes
 
