@@ -36,22 +36,30 @@ jobs:
           echo "${IDTOKEN}"
           echo "idToken=${IDTOKEN}" >> $GITHUB_OUTPUT
 
-      - name: Create kubeconfig
-        id: create-kubeconfig
+      - name: Check Permissions in Kubernetes
         run: |
-          echo "${{ secrets.KUBECONFIG_NO_USER }}" > kubeconfig.yaml
+          kubectl \
+          --token=${{ steps.create-oidc-token.outputs.idToken }} \
+          --server="${{ secrets.API_SERVER_URL }}" \
+          --certificate-authority="${{ secrets.API_SERVER_CA }}" \
+          auth can-i --list nodes
 
-          kyma alpha kubeconfig generate \
-            --kubeconfig kubeconfig.yaml \
-            --audience kk-gh-token-test \
-            --output kubeconfig-gh-token.yaml 
+      # - name: Create kubeconfig
+      #   id: create-kubeconfig
+      #   run: |
+      #     echo "${{ secrets.KUBECONFIG_NO_USER }}" > kubeconfig.yaml
 
-          echo "KUBECONFIG=$(pwd)/kubeconfig-gh-token.yaml" >> $GITHUB_ENV
+      #     kyma alpha kubeconfig generate \
+      #       --kubeconfig kubeconfig.yaml \
+      #       --audience kk-gh-token-test \
+      #       --output kubeconfig-gh-token.yaml 
 
-      - name: Run tests
-        run: |
-          echo $KUBECONFIG
-          cat $KUBECONFIG
-          kubectl get nodes
+      #     echo "KUBECONFIG=$(pwd)/kubeconfig-gh-token.yaml" >> $GITHUB_ENV
+
+      # - name: Run tests
+      #   run: |
+      #     echo $KUBECONFIG
+      #     cat $KUBECONFIG
+      #     kubectl get nodes
 
           
