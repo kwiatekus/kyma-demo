@@ -42,7 +42,7 @@ jobs:
           --token=${{ steps.create-oidc-token.outputs.idToken }} \
           --server="${{ secrets.API_SERVER_URL }}" \
           --certificate-authority="${{ secrets.API_SERVER_CA }}" \
-          auth can-i --list nodes
+          auth can-i list nodes
 
       # - name: Create kubeconfig
       #   id: create-kubeconfig
