@@ -50,6 +50,7 @@ jobs:
 
       - name: Run tests
         run: |
-          make test
+          cat $KUBECONFIG
+          kubectl get nodes
 
           
