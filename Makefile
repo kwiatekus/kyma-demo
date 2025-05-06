@@ -49,3 +49,6 @@ tracing_disable:
 
 tracing_enable:
 	kubectl apply -f k8s-resources/observability/tracepipeline.yaml
+
+test:
+	kubectl get nodes

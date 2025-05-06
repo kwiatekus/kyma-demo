@@ -20,6 +20,10 @@ jobs:
         with:
           go-version: '1.23'
 
+      - uses: kyma-project/docker-registry/.github/actions/setup-kyma@c1f0381f3e059cdbf1883af28a917693ee5207a8
+        with:
+          path: "/usr/local/bin"
+
       - name: Create OIDC Token
         id: create-oidc-token
         run: |
@@ -30,4 +34,22 @@ jobs:
             -H "Accept: application/json; api-version=2.0" \
             "$OIDC_URL_WITH_AUDIENCE" | jq -r .value)
           echo "${IDTOKEN}"
-          echo "::set-output name=idToken::${IDTOKEN}"
+          echo "idToken=${IDTOKEN}" >> $GITHUB_OUTPUT
+
+      - name: Create kubeconfig
+        id: create-kubeconfig
+        run: |
+          echo "${{ secrets.KUBECONFIG_NO_USER }}" > kubeconfig.yaml
+
+          # test also with  --audience kk-gh-token-test
+          kyma alpha kubeconfig generate \
+            --kubeconfig kubeconfig.yaml \
+            --token "${{ steps.create-oidc-token.outputs.idToken }}" \
+            --output kubeconfig-gh-token.yaml 
+          echo "KUBECONFIG=$(pwd)/kubeconfig-gh-token.yaml" >> $GITHUB_ENV
+
+      - name: Run tests
+        run: |
+          make test
+
+          
