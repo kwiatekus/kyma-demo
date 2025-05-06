@@ -44,8 +44,10 @@ jobs:
           # test also with  --audience kk-gh-token-test
           kyma alpha kubeconfig generate \
             --kubeconfig kubeconfig.yaml \
-            --token "${{ steps.create-oidc-token.outputs.idToken }}" \
+            # --token "${{ steps.create-oidc-token.outputs.idToken }}" \
+            --audience kk-gh-token-test \
             --output kubeconfig-gh-token.yaml 
+
           echo "KUBECONFIG=$(pwd)/kubeconfig-gh-token.yaml" >> $GITHUB_ENV
 
       - name: Run tests
