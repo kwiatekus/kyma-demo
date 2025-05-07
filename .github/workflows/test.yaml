@@ -47,21 +47,21 @@ jobs:
           --certificate-authority=ca.crt \
           auth can-i list nodes
 
-      # - name: Create kubeconfig
-      #   id: create-kubeconfig
-      #   run: |
-      #     echo "${{ secrets.KUBECONFIG_NO_USER }}" > kubeconfig.yaml
-      #     kyma alpha kubeconfig generate \
-      #       --kubeconfig kubeconfig.yaml \
-      #       --audience kk-gh-token-test \
-      #       --output kubeconfig-gh-token.yaml 
+      - name: Create kubeconfig
+        id: create-kubeconfig
+        run: |
+          echo "${{ secrets.KUBECONFIG_NO_USER }}" > kubeconfig.yaml
+          kyma alpha kubeconfig generate \
+            --kubeconfig kubeconfig.yaml \
+            --audience kk-gh-token-test \
+            --output kubeconfig-gh-token.yaml 
 
-      #     echo "KUBECONFIG=$(pwd)/kubeconfig-gh-token.yaml" >> $GITHUB_ENV
+          echo "KUBECONFIG=$(pwd)/kubeconfig-gh-token.yaml" >> $GITHUB_ENV
 
-      # - name: Run tests
-      #   run: |
-      #     echo $KUBECONFIG
-      #     cat $KUBECONFIG
-      #     kubectl get nodes
+      - name: Run tests
+        run: |
+          kubectl get nodes
+        env:
+          KUBECONFIG: ${{ env.KUBECONFIG }}
 
           
